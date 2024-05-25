@@ -1,0 +1,35 @@
+{
+  "name": "fastify-dailydiet-api",
+  "version": "1.0.0",
+  "description": "![Thiago - Capa](https://user-images.githubusercontent.com/9437391/153274659-915c4df9-0032-4757-a9a2-6a85107c276b.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx vitest",
+    "build": "tsup src --out-dir build",
+    "start": "node index.js",
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint src --ext .ts --fix",
+    "knex": "node --import tsx ./node_modules/.bin/knex"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^9.3.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^4.27.0",
+    "knex": "^3.1.0",
+    "pg": "^8.11.5",
+    "sqlite3": "^5.1.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
+    "@types/node": "^20.12.12",
+    "@types/supertest": "^6.0.2",
+    "eslint": "^8.57.0",
+    "supertest": "^7.0.0",
+    "tsup": "^8.0.2",
+    "tsx": "^4.10.5",
+    "vitest": "^1.6.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
