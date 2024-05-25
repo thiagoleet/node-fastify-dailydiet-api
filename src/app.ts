@@ -2,8 +2,10 @@ import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 import fjwt, { FastifyJWT } from '@fastify/jwt'
 import fCookie from '@fastify/cookie'
 import { userRoutes } from './modules/user/user.route'
+import { mealSchemas } from './modules/meal/meal.schema'
 import { userSchemas } from './modules/user/user.schema'
 import { env } from './env'
+import { mealRoutes } from './modules/meal/meal.route'
 
 const app = fastify()
 
@@ -40,12 +42,19 @@ app.addHook('preHandler', async (request) => {
   console.log(`[${request.method}] ${request.url}`)
 })
 
-for (const schema of [...userSchemas]) {
+// Schemas
+
+const schemas = [...userSchemas, ...mealSchemas]
+
+schemas.forEach((schema) => {
   app.addSchema(schema)
-}
+})
 
 // Users Routes
 app.register(userRoutes, { prefix: 'api/users' })
+
+// Meal routes
+app.register(mealRoutes, { prefix: 'api/meals' })
 
 // Healthcheck
 app.get('/api/healthcheck', (req, res) => {
