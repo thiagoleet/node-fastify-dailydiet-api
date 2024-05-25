@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { $ref } from './user.schema'
-import { createUser } from './user.controller'
+import { createUser, login } from './user.controller'
 
 export async function userRoutes(app: FastifyInstance) {
   app.post(
@@ -16,7 +16,18 @@ export async function userRoutes(app: FastifyInstance) {
     createUser,
   )
 
-  app.post('/login', () => {})
+  app.post(
+    '/login',
+    {
+      schema: {
+        body: $ref('loginSchema'),
+        response: {
+          200: $ref('loginResponseSchema'),
+        },
+      },
+    },
+    login,
+  )
   app.delete('/logout', () => {})
   app.log.info('user routes registered')
 }
