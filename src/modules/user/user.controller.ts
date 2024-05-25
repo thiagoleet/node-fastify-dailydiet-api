@@ -67,7 +67,6 @@ export async function login(
 
     reply.setCookie('access_token', token, {
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
       secure: true,
     })
 
@@ -76,4 +75,42 @@ export async function login(
     console.error(error)
     return reply.status(500).send({ message: 'Internal server error' })
   }
+}
+
+export async function getUser(req: FastifyRequest, reply: FastifyReply) {
+  const token = req.cookies.access_token
+
+  if (!token) {
+    return reply.status(401).send({ message: 'Unauthorized' })
+  }
+
+  const decoded = req.jwt.decode(token)
+
+  if (!decoded) {
+    return reply.status(401).send({ message: 'Unauthorized' })
+  }
+
+  const { id } = decoded as { id: string }
+
+  const user = await knex('users').where('id', id).first()
+
+  if (!user) {
+    return reply.status(404).send({ message: 'User not found' })
+  }
+
+  return reply.send({
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    },
+  })
+}
+
+export async function logout(req: FastifyRequest, reply: FastifyReply) {
+  reply.clearCookie('access_token')
+
+  return reply.status(200).send({ message: 'Logged out' })
 }
